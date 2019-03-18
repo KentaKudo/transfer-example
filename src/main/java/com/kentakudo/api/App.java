@@ -1,6 +1,8 @@
 package com.kentakudo.api;
 
 import io.javalin.Javalin;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Hello world!
@@ -12,7 +14,21 @@ public class App
     {
         Javalin app = Javalin.create().start(7000);
         app.get("/accounts", ctx -> {
-            ctx.result("TODO: GET /accounts\n");
+            Account[] accounts = datastore.getAccounts();
+            JSONArray objs = new JSONArray();
+            for (Account account : accounts) {
+                JSONObject obj = new JSONObject();
+                obj.put("id", account.getId());
+                obj.put("name", account.getName());
+                obj.put("amount", account.getAmount());
+
+                objs.add(obj);
+            }
+
+            JSONObject json = new JSONObject();
+            json.put("accounts", objs);
+
+            ctx.result(json.toString());
         });
         app.post("/accounts", ctx -> {
             ctx.result("TODO: POST /accounts\n");
@@ -33,4 +49,6 @@ public class App
             ctx.result("TODO: GET /transfers/" + ctx.pathParam("id") + "\n");
         });
     }
+
+    private static Datastore datastore = new Datastore();
 }
