@@ -14,5 +14,5 @@ $ mvn package
 ## Run
 
 ```
-$ java -cp target/transfer-example-1.0-SNAPSHOT.jar com.kentakudo.api.App
+$ mvn exec:java
 ```
