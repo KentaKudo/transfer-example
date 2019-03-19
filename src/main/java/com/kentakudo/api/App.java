@@ -1,8 +1,12 @@
 package com.kentakudo.api;
 
 import io.javalin.Javalin;
+
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Hello world!
@@ -14,39 +18,40 @@ public class App
     {
         Javalin app = Javalin.create().start(7000);
         app.get("/accounts", ctx -> {
-            Account[] accounts = datastore.getAccounts();
-            JSONArray objs = new JSONArray();
-            for (Account account : accounts) {
-                JSONObject obj = new JSONObject();
-                obj.put("id", account.getId());
-                obj.put("name", account.getName());
-                obj.put("amount", account.getAmount());
-
-                objs.add(obj);
-            }
-
+            List<Account> accounts = datastore.getAccounts();
             JSONObject json = new JSONObject();
-            json.put("accounts", objs);
+            json.put("accounts", accounts);
 
-            ctx.result(json.toString());
+            ctx.json(json);
         });
         app.post("/accounts", ctx -> {
-            ctx.result("TODO: POST /accounts\n");
+            Account account = ctx.bodyAsClass(Account.class);
+            datastore.createAccount(account);
+            ctx.json(account);
         });
         app.get("/accounts/:id", ctx -> {
-            ctx.result("TODO: GET /accounts/" + ctx.pathParam("id") + "\n");
-        });
-        app.post("/accounts/:id", ctx -> {
-            ctx.result("TODO: POST /accounts/"+ ctx.pathParam("id") + "\n");
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            ctx.json(datastore.getAccountById(id));
         });
         app.get("/transfers", ctx -> {
-            ctx.result("TODO: GET /transfers\n");
+            List<Transfer> transfers = datastore.getTransfers();
+            JSONObject json = new JSONObject();
+            json.put("transfers", transfers);
+
+            ctx.json(json);
         });
         app.post("/transfers", ctx -> {
-            ctx.result("TODO: POST /transfers\n");
+            Transfer transfer = ctx.bodyAsClass(Transfer.class);
+            Account fromUser = datastore.getAccountById(transfer.getFromUserId());
+            Account toUser = datastore.getAccountById(transfer.getToUserId());
+            fromUser.setAmount(fromUser.getAmount() - transfer.getAmount());
+            toUser.setAmount(toUser.getAmount() + transfer.getAmount());
+            datastore.createTransfer(transfer);
+            ctx.json(transfer);
         });
         app.get("/transfers/:id", ctx -> {
-            ctx.result("TODO: GET /transfers/" + ctx.pathParam("id") + "\n");
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            ctx.json(datastore.getTransferById(id));
         });
     }
 
