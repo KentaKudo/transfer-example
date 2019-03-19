@@ -13,22 +13,27 @@ public class App
 {
     public static void main( String[] args )
     {
-        App app = new App(new Datastore());
-        app.start();
-        app.javalin.get("/accounts", app::getAccounts);
-        app.javalin.post("/accounts", app::createAccount);
-        app.javalin.get("/accounts/:id", app::getAccount);
-        app.javalin.get("/transfers", app::getTransfers);
-        app.javalin.post("/transfers", app::createTransfer);
-        app.javalin.get("/transfers/:id", app::getTransfer);
+        (new App(new Datastore()))
+            .route()
+            .start();
     }
 
     public App(Datastore datastore) {
         this.datastore = datastore;
     }
 
-    public Javalin start() {
-        return javalin.start(7000);
+    public App route() {
+        javalin.get("/accounts", this::getAccounts);
+        javalin.post("/accounts", this::createAccount);
+        javalin.get("/accounts/:id", this::getAccount);
+        javalin.get("/transfers", this::getTransfers);
+        javalin.post("/transfers", this::createTransfer);
+        javalin.get("/transfers/:id", this::getTransfer);
+        return this;
+    }
+
+    public void start() {
+        javalin.start(7000);
     }
 
     public void getAccounts(Context ctx) {
