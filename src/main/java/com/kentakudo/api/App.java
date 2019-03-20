@@ -54,6 +54,11 @@ public class App
 
     public void getAccount(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
+        Account account = datastore.getAccountById(id);
+        if (account == null) {
+            ctx.status(404).result("Not found");
+            return;
+        }
         ctx.json(datastore.getAccountById(id));
     }
 
@@ -69,6 +74,14 @@ public class App
         Transfer transfer = ctx.bodyAsClass(Transfer.class);
         Account fromUser = datastore.getAccountById(transfer.getFromUserId());
         Account toUser = datastore.getAccountById(transfer.getToUserId());
+        if (fromUser == null || toUser == null) {
+            ctx.status(404).result("Not found");
+            return;
+        }
+        if (fromUser.getAmount() < transfer.getAmount()) {
+            ctx.status(400).result("Invalid amount");
+            return;
+        }
         fromUser.setAmount(fromUser.getAmount() - transfer.getAmount());
         toUser.setAmount(toUser.getAmount() + transfer.getAmount());
         datastore.createTransfer(transfer);
@@ -77,6 +90,11 @@ public class App
 
     public void getTransfer(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
+        Transfer transfer = datastore.getTransferById(id);
+        if (transfer == null) {
+            ctx.status(404).result("Not found");
+            return;
+        }
         ctx.json(datastore.getTransferById(id));
     }
 
