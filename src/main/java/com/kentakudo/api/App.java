@@ -5,9 +5,7 @@ import io.javalin.Javalin;
 
 import java.util.List;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 public class App 
 {
