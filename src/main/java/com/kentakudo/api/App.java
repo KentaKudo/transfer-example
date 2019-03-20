@@ -34,6 +34,10 @@ public class App
         javalin.start(7000);
     }
 
+    public void stop() {
+        javalin.stop();
+    }
+
     public void getAccounts(Context ctx) {
         List<Account> accounts = datastore.getAccounts();
         JSONObject json = new JSONObject();
