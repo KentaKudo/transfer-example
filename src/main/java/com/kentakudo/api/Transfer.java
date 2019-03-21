@@ -39,6 +39,6 @@ public class Transfer
     
     private int id;
     private int amount;
-    private int fromUserId;
-    private int toUserId;
+    @JsonProperty("from_user_id") private int fromUserId;
+    @JsonProperty("to_user_id") private int toUserId;
 }
