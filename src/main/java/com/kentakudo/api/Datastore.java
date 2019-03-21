@@ -86,6 +86,8 @@ public class Datastore
 
     public String runWithLock(Callback callback)
     {
+        // ReentrantLock allows you to call lock more than twice in the same thread;
+        // If lock is called inside apply it won't get deadlocked.
         writeLock.lock();
         String res = callback.apply(this);
         writeLock.unlock();

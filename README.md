@@ -81,7 +81,8 @@ $ curl http://localhost:7000/transfers/789
 }
 ```
 
-## Known Issues
+## TODO
 
-- Doesn't scale
-I used map for in-memory storage and lock for mutex but this doesn't scale for the large number of requests. Better in-memory data structure with transaction support would be considered.
+- strip framework
+- fix the interface of runWithLock
+- strip maven if possible
