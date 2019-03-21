@@ -98,9 +98,12 @@ public class Datastore {
         Pair<Integer, String> apply(Datastore datastore);
     }
 
+    /**
+     * runWithLock provides the ability to call multiple Datastore manipulations in the same lock.
+     */
     public Pair<Integer, String> runWithLock(Callback callback) {
         // ReentrantLock allows you to call lock more than twice in the same thread;
-        // If lock is called inside apply it won't get deadlocked.
+        // Even if lock is called inside apply it won't get deadlocked as long as the thread is identical.
         writeLock.lock();
         Pair<Integer, String> res = callback.apply(this);
         writeLock.unlock();

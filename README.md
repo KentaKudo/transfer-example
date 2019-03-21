@@ -80,10 +80,3 @@ $ curl http://localhost:7000/transfers/789
     "amount": 51
 }
 ```
-
-## TODO
-
-- strip framework
-- fix the interface of runWithLock
-- strip maven if possible
-- linting: function

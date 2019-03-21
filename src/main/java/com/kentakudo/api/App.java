@@ -72,7 +72,7 @@ public class App {
 
     public void createTransfer(Context ctx) {
         Transfer transfer = ctx.bodyAsClass(Transfer.class);
-        Pair<Integer, String> result = datastore.runWithLock(ds -> {
+        Pair<Integer, String> err = datastore.runWithLock(ds -> {
             Account fromUser = ds.getAccountById(transfer.getFromUserId());
             Account toUser = ds.getAccountById(transfer.getToUserId());
             if (fromUser == null || toUser == null) {
@@ -90,8 +90,8 @@ public class App {
             ds.createTransfer(transfer);
             return null;
         });
-        if (result != null) {
-            ctx.status(result.getFirst()).result(result.getSecond());
+        if (err != null) {
+            ctx.status(err.getFirst()).result(err.getSecond());
             return;
         }
 
