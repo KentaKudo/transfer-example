@@ -2,6 +2,7 @@ package com.kentakudo.api;
 
 import io.javalin.Context;
 import io.javalin.Javalin;
+import kotlin.Pair;
 
 import java.util.List;
 
@@ -72,26 +73,22 @@ public class App
 
     public void createTransfer(Context ctx) {
         Transfer transfer = ctx.bodyAsClass(Transfer.class);
-        String result = datastore.runWithLock(ds -> {
+        Pair<Integer, String> result = datastore.runWithLock(ds -> {
             Account fromUser = ds.getAccountById(transfer.getFromUserId());
             Account toUser = ds.getAccountById(transfer.getToUserId());
             if (fromUser == null || toUser == null) {
-                return "Not found";
+                return new Pair<Integer, String>(404, "Not found");
             }
             if (fromUser.getAmount() < transfer.getAmount()) {
-                return "Invalid amount";
+                return new Pair<Integer, String>(400, "Invalid amount");
             }
             fromUser.setAmount(fromUser.getAmount() - transfer.getAmount());
             toUser.setAmount(toUser.getAmount() + transfer.getAmount());
             ds.createTransfer(transfer);
-            return "";
+            return null;
         });
-        if (result == "Not found") {
-            ctx.status(404).result(result);
-            return;
-        }
-        if (result == "Invalid amount") {
-            ctx.status(400).result(result);
+        if (result != null) {
+            ctx.status(result.getFirst()).result(result.getSecond());
             return;
         }
 

@@ -8,6 +8,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import kotlin.Pair;
+
 public class Datastore
 {
     public Datastore(){
@@ -81,15 +83,15 @@ public class Datastore
 
     @FunctionalInterface
     interface Callback {
-        String apply(Datastore datastore);
+        Pair<Integer, String> apply(Datastore datastore);
     }
 
-    public String runWithLock(Callback callback)
+    public Pair<Integer, String> runWithLock(Callback callback)
     {
         // ReentrantLock allows you to call lock more than twice in the same thread;
         // If lock is called inside apply it won't get deadlocked.
         writeLock.lock();
-        String res = callback.apply(this);
+        Pair<Integer, String> res = callback.apply(this);
         writeLock.unlock();
         return res;
     }

@@ -100,6 +100,11 @@ public class AppTest
         assertEquals(51, result.getAmount());
         assertEquals(0, result.getFromUserId());
         assertEquals(1, result.getToUserId());
+
+        Account alice = mock.getAccountById(0);
+        assertEquals(49, alice.getAmount());
+        Account bob = mock.getAccountById(1);
+        assertEquals(151, bob.getAmount());
     }
 
     public void testPostTransfersInvalidAccount() throws Exception
