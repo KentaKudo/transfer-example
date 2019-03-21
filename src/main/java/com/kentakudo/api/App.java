@@ -72,19 +72,29 @@ public class App
 
     public void createTransfer(Context ctx) {
         Transfer transfer = ctx.bodyAsClass(Transfer.class);
-        Account fromUser = datastore.getAccountById(transfer.getFromUserId());
-        Account toUser = datastore.getAccountById(transfer.getToUserId());
-        if (fromUser == null || toUser == null) {
-            ctx.status(404).result("Not found");
+        String result = datastore.runWithLock(ds -> {
+            Account fromUser = ds.getAccountById(transfer.getFromUserId());
+            Account toUser = ds.getAccountById(transfer.getToUserId());
+            if (fromUser == null || toUser == null) {
+                return "Not found";
+            }
+            if (fromUser.getAmount() < transfer.getAmount()) {
+                return "Invalid amount";
+            }
+            fromUser.setAmount(fromUser.getAmount() - transfer.getAmount());
+            toUser.setAmount(toUser.getAmount() + transfer.getAmount());
+            ds.createTransfer(transfer);
+            return "";
+        });
+        if (result == "Not found") {
+            ctx.status(404).result(result);
             return;
         }
-        if (fromUser.getAmount() < transfer.getAmount()) {
-            ctx.status(400).result("Invalid amount");
+        if (result == "Invalid amount") {
+            ctx.status(400).result(result);
             return;
         }
-        fromUser.setAmount(fromUser.getAmount() - transfer.getAmount());
-        toUser.setAmount(toUser.getAmount() + transfer.getAmount());
-        datastore.createTransfer(transfer);
+
         ctx.json(transfer);
     }
 

@@ -80,3 +80,8 @@ $ curl http://localhost:7000/transfers/789
     "amount": 51
 }
 ```
+
+## Known Issues
+
+- Doesn't scale
+I used map for in-memory storage and lock for mutex but this doesn't scale for the large number of requests. Better in-memory data structure with transaction support would be considered.
