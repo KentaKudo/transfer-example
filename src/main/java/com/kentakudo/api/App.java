@@ -82,8 +82,12 @@ public class App
             if (fromUser.getAmount() < transfer.getAmount()) {
                 return new Pair<Integer, String>(400, "Invalid amount");
             }
+            
             fromUser.setAmount(fromUser.getAmount() - transfer.getAmount());
+            ds.updateAccount(fromUser);
             toUser.setAmount(toUser.getAmount() + transfer.getAmount());
+            ds.updateAccount(toUser);
+
             ds.createTransfer(transfer);
             return null;
         });

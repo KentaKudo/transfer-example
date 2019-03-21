@@ -1,5 +1,8 @@
 package com.kentakudo.api;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,6 +35,14 @@ public class Account
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public Object[] serialise() {
+        return new Object[] {getId(), getName(), getAmount()};
+    }
+
+    public static Account deserialise(Object[] args) {
+        return new Account((Integer)args[0], (String)args[1], (Integer)args[2]);
     }
 
     private int id;

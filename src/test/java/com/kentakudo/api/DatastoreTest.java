@@ -35,6 +35,11 @@ public class DatastoreTest
         assertNotNull(result);
         results = sut.getAccounts();
         assertEquals(1, results.size());
+
+        result.setAmount(101);
+        sut.updateAccount(result);
+        result = sut.getAccountById(0);
+        assertEquals(101, result.getAmount());
     }
 
     public void testTransfer() throws Exception
