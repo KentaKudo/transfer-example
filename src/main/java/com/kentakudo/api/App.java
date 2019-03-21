@@ -59,7 +59,7 @@ public class App
             ctx.status(404).result("Not found");
             return;
         }
-        ctx.json(datastore.getAccountById(id));
+        ctx.json(account);
     }
 
     public void getTransfers(Context ctx) {
@@ -105,7 +105,7 @@ public class App
             ctx.status(404).result("Not found");
             return;
         }
-        ctx.json(datastore.getTransferById(id));
+        ctx.json(transfer);
     }
 
     private Javalin javalin = Javalin.create();
