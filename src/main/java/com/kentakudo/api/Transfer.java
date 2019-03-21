@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Transfer
-{
+public class Transfer {
     @JsonCreator
     public Transfer(
-        @JsonProperty("id") int id, @JsonProperty("amount") int amount, @JsonProperty("from_user_id") int fromUserId, @JsonProperty("to_user_id") int toUserId
+        @JsonProperty("id") int id,
+        @JsonProperty("amount") int amount,
+        @JsonProperty("from_user_id") int fromUserId,
+        @JsonProperty("to_user_id") int toUserId
     ) {
         this.id = id;
         this.amount = amount;

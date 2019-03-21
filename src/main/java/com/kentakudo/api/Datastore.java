@@ -10,9 +10,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import kotlin.Pair;
 
-public class Datastore
-{
-    public Datastore(){
+public class Datastore {
+    public Datastore() {
         data.put(KEY_ACCOUNTS, new ArrayList<Object[]>());
         data.put(KEY_TRANSFERS, new ArrayList<Object[]>());
     }
@@ -99,8 +98,7 @@ public class Datastore
         Pair<Integer, String> apply(Datastore datastore);
     }
 
-    public Pair<Integer, String> runWithLock(Callback callback)
-    {
+    public Pair<Integer, String> runWithLock(Callback callback) {
         // ReentrantLock allows you to call lock more than twice in the same thread;
         // If lock is called inside apply it won't get deadlocked.
         writeLock.lock();

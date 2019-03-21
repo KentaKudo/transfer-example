@@ -8,9 +8,8 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 
-public class App 
-{
-    public static void main( String[] args )
+public class App {
+    public static void main(String[] args)
     {
         (new App(new Datastore()))
             .route()
@@ -82,7 +81,7 @@ public class App
             if (fromUser.getAmount() < transfer.getAmount()) {
                 return new Pair<Integer, String>(400, "Invalid amount");
             }
-            
+
             fromUser.setAmount(fromUser.getAmount() - transfer.getAmount());
             ds.updateAccount(fromUser);
             toUser.setAmount(toUser.getAmount() + transfer.getAmount());

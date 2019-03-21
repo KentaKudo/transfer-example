@@ -6,23 +6,16 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class DatastoreTest
-    extends TestCase
-{
-    private Datastore sut = new Datastore();
-
-    public DatastoreTest(String testName)
-    {
+public class DatastoreTest extends TestCase {
+    public DatastoreTest(String testName) {
         super(testName);
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         return new TestSuite(DatastoreTest.class);
     }
 
-    public void testAccount() throws Exception
-    {
+    public void testAccount() throws Exception {
         Account result = sut.getAccountById(0);
         assertNull(result);
         List<Account> results = sut.getAccounts();
@@ -42,8 +35,7 @@ public class DatastoreTest
         assertEquals(101, result.getAmount());
     }
 
-    public void testTransfer() throws Exception
-    {
+    public void testTransfer() throws Exception {
         Transfer result = sut.getTransferById(0);
         assertNull(result);
         List<Transfer> results = sut.getTransfers();
@@ -57,4 +49,6 @@ public class DatastoreTest
         results = sut.getTransfers();
         assertEquals(1, results.size());
     }
+
+    private Datastore sut = new Datastore();
 }
