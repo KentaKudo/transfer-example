@@ -9,8 +9,7 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 public class App {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         (new App(new Datastore()))
             .route()
             .start();
